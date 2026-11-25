@@ -1,0 +1,37 @@
+.history-period {
+  padding: 16px 22px;
+  border-bottom: 1px solid #edf0ee;
+  background: #fbfcfd;
+}
+
+.history-period-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+}
+
+.history-period-fields .form-field input {
+  min-width: 0;
+}
+
+.history-period-fields .primary-button {
+  min-height: 42px;
+}
+
+.history-period-error {
+  margin: 10px 0 0;
+  color: #b35353;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .history-period-fields {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .history-period-fields .primary-button {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
