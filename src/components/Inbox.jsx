@@ -252,7 +252,7 @@ export default function Inbox({ conversations, contacts, departments, operators,
       [selected.id]: {
         ...current[selected.id],
         status: 'Em atendimento',
-        assignedOperator: 'Ana Carolina',
+        assignedOperator: 'João Vitor',
       },
     }))
     onStartConversation(selected.id)

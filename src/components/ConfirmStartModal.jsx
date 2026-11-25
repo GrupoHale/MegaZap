@@ -12,7 +12,7 @@ export default function ConfirmStartModal({ contactName, onCancel, onConfirm }) 
           <button className="icon-button close-modal" onClick={onCancel} aria-label="Fechar">×</button>
         </header>
         <div className="confirm-start-content">
-          <p>O atendimento de <strong>{contactName}</strong> sairá da fila de espera e será atribuído a Ana Carolina.</p>
+          <p>O atendimento de <strong>{contactName}</strong> sairá da fila de espera e será atribuído ao Operador</p>
         </div>
         <footer className="modal-footer">
           <button type="button" className="secondary-button" onClick={onCancel}>Cancelar</button>
