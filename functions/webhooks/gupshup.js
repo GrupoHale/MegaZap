@@ -3,6 +3,10 @@ import {
   getState, json, readPayload, saveState,
 } from '../_lib/inbox.js'
 
+export function onRequestGet() {
+  return json({ status: 'ok', endpoint: 'gupshup-webhook' })
+}
+
 export async function onRequestPost({ request, env }) {
   try {
     const event = await readPayload(request)
