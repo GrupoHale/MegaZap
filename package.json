@@ -8,6 +8,7 @@
     "api": "node backend/server.js",
     "gupshup:test": "node scripts/send-gupshup-test.js",
     "build": "vite build",
+    "deploy:cloudflare": "npm run build && npx wrangler deploy",
     "lint": "eslint .",
     "preview": "vite preview"
   },

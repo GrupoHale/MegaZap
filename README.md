@@ -35,6 +35,12 @@ Depois do deploy, configure na Gupshup o webhook de mensagens recebidas para `ht
 
 O armazenamento de teste é um único registro KV compartilhado e não substitui um banco de dados de produção. Use um namespace separado para cada ambiente. Para testar envio pela API, as credenciais do sandbox e o número de origem precisam estar autorizados pela configuração da Gupshup.
 
+### Deploy usando Workers e `workers.dev`
+
+Se o projeto foi criado no fluxo novo de Workers e a URL pública termina em `workers.dev`, publique também o Worker de roteamento deste repositório. O arquivo `wrangler.toml` aponta para `worker.js`, que encaminha `/webhooks/gupshup` e `/api/*` às Functions e serve o front-end pelos assets de `dist`.
+
+Na raiz deste projeto, execute `npm run deploy:cloudflare` após autenticar o Wrangler com `npx wrangler login`. O deploy exige que o projeto Workers possa publicar o Worker `megazap`. Para a caixa de entrada compartilhar mensagens recebidas, configure o binding KV `MEGAZAP_STORE` no Worker e faça novo deploy. O endpoint GET do webhook deve então responder `{"status":"ok","endpoint":"gupshup-webhook"}`.
+
 ## Teste inicial da Gupshup
 
 1. Copie `.env.example` para `.env` e preencha as credenciais do sandbox localmente. Nunca coloque a API key em arquivos `src/` nem a envie pelo chat.

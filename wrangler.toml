@@ -1,0 +1,13 @@
+name = "megazap"
+main = "./worker.js"
+compatibility_date = "2026-11-25"
+keep_vars = true
+
+[[kv_namespaces]]
+binding = "MEGAZAP_STORE"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true
+not_found_handling = "single-page-application"
