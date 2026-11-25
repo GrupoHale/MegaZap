@@ -39,7 +39,7 @@ O armazenamento de teste é um único registro KV compartilhado e não substitui
 
 Se o projeto foi criado no fluxo novo de Workers e a URL pública termina em `workers.dev`, publique também o Worker de roteamento deste repositório. O arquivo `wrangler.toml` aponta para `worker.js`, que encaminha `/webhooks/gupshup` e `/api/*` às Functions e serve o front-end pelos assets de `dist`.
 
-Na raiz deste projeto, execute `npm run deploy:cloudflare` após autenticar o Wrangler com `npx wrangler login`. O deploy exige que o projeto Workers possa publicar o Worker `megazap`. Para a caixa de entrada compartilhar mensagens recebidas, configure o binding KV `MEGAZAP_STORE` no Worker e faça novo deploy. O endpoint GET do webhook deve então responder `{"status":"ok","endpoint":"gupshup-webhook"}`.
+Na raiz deste projeto, execute `npm run deploy:cloudflare` após autenticar o Wrangler com `npx wrangler login`. O deploy exige que o projeto Workers possa publicar o Worker `megazap`. O estado da caixa de entrada fica em um Durable Object para que uma mensagem recebida apareça logo após o webhook gravá-la; a primeira leitura importa automaticamente o estado anterior do KV. O endpoint GET do webhook deve responder `{"status":"ok","endpoint":"gupshup-webhook"}`.
 
 ## Teste inicial da Gupshup
 

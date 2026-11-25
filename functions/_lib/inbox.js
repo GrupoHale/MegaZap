@@ -3,7 +3,10 @@ const STORE_KEY = 'inbox-state'
 export function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    },
   })
 }
 
@@ -43,12 +46,48 @@ export function normalizePhone(value) {
 }
 
 export async function getState(env) {
+  if (env.MEGAZAP_STATE) {
+    const id = env.MEGAZAP_STATE.idFromName('megazap-inbox')
+    const stub = env.MEGAZAP_STATE.get(id)
+    const response = await stub.fetch('https://inbox/state')
+    const state = await response.json()
+    if (state) return state
+
+    // Move the existing test inbox from KV the first time the Durable Object is used.
+    const previousState = env.MEGAZAP_STORE
+      ? await env.MEGAZAP_STORE.get(STORE_KEY, 'json')
+      : null
+    const initialState = previousState || createEmptyState()
+    await stub.fetch('https://inbox/state', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(initialState),
+    })
+    return initialState
+  }
+
   const state = await env.MEGAZAP_STORE.get(STORE_KEY, 'json')
-  return state || { contacts: [], conversations: [], messagesByPhone: {}, processedWebhookIds: [] }
+  return state || createEmptyState()
 }
 
 export async function saveState(env, state) {
+  if (env.MEGAZAP_STATE) {
+    const id = env.MEGAZAP_STATE.idFromName('megazap-inbox')
+    const stub = env.MEGAZAP_STATE.get(id)
+    const response = await stub.fetch('https://inbox/state', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state),
+    })
+    if (!response.ok) throw new Error('Não foi possível salvar o estado da caixa de entrada.')
+    return
+  }
+
   await env.MEGAZAP_STORE.put(STORE_KEY, JSON.stringify(state))
+}
+
+function createEmptyState() {
+  return { contacts: [], conversations: [], messagesByPhone: {}, processedWebhookIds: [] }
 }
 
 function initials(name) {

@@ -5,6 +5,29 @@ import {
   onRequestPost as receiveWebhook,
 } from './functions/webhooks/gupshup.js'
 import { json } from './functions/_lib/inbox.js'
+import { DurableObject } from 'cloudflare:workers'
+
+const INBOX_STATE_KEY = 'inbox-state'
+
+export class InboxState extends DurableObject {
+  async fetch(request) {
+    const { pathname } = new URL(request.url)
+    if (pathname !== '/state') return new Response('Not found', { status: 404 })
+
+    if (request.method === 'GET') {
+      const state = await this.ctx.storage.get(INBOX_STATE_KEY)
+      return Response.json(state ?? null)
+    }
+
+    if (request.method === 'PUT') {
+      const state = await request.json()
+      await this.ctx.storage.put(INBOX_STATE_KEY, state)
+      return new Response(null, { status: 204 })
+    }
+
+    return new Response('Method not allowed', { status: 405 })
+  }
+}
 
 export default {
   async fetch(request, env) {
