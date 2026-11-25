@@ -9,13 +9,50 @@ import { getLocalDateInputValue } from '../utils/date.js'
 import { fetchTestInbox, sendTestMessage } from '../services/gupshupTest.js'
 
 const today = getLocalDateInputValue()
-const starterMessages = [
-  { from: 'customer', text: 'Oi! Tenho interesse em instalar rastreador em meu veiculo.', time: '10:36', date: today },
-  { from: 'agent', text: 'Oi! 😊 Que bom receber sua mensagem. Posso te ajudar a encontrar a melhor opção de plano!', time: '10:38', date: today },
-  { from: 'customer', text: 'Quero o plano premium.', time: '10:40', date: today },
-  { from: 'agent', text: 'Perfeito! irei precisar de algumas informações sobre seu veículo.', time: '10:41', date: today },
-  { from: 'customer', text: 'Tudo bem, quais informações você precisa?', time: '10:42', date: today },
-]
+const starterMessagesByConversation = {
+  1: [
+    { from: 'customer', text: 'Quero instalar um rastreador no meu carro. Vocês atendem na região da Vila Mariana?', time: '10:34', date: today },
+    { from: 'agent', text: 'Atendemos sim, Mariana! Temos instalação em domicílio e em oficinas parceiras.', time: '10:36', date: today },
+    { from: 'customer', text: 'O plano premium mostra a localização em tempo real?', time: '10:39', date: today },
+    { from: 'agent', text: 'Sim. Ele também inclui histórico de rotas, alertas de movimento e suporte prioritário.', time: '10:41', date: today },
+    { from: 'customer', text: 'Perfeito, fico no aguardo dos horários disponíveis para instalação.', time: '10:42', date: today },
+  ],
+  2: [
+    { from: 'customer', text: 'O aplicativo está mostrando meu veículo como desconectado desde ontem.', time: '10:12', date: today },
+    { from: 'agent', text: 'Rafael, vou verificar. O veículo está em um local com sinal de celular?', time: '10:14', date: today },
+    { from: 'customer', text: 'Está na garagem. Lá o sinal costuma ser um pouco fraco.', time: '10:16', date: today },
+    { from: 'agent', text: 'Obrigado. Quando puder, ligue o veículo por alguns minutos e atualize a tela do aplicativo.', time: '10:17', date: today },
+    { from: 'customer', text: 'Vou testar agora. Se continuar offline, aviso por aqui.', time: '10:18', date: today },
+  ],
+  3: [
+    { from: 'customer', text: 'Recebi o alerta de ignição, mas o carro está parado na oficina. Isso é normal?', time: '09:48', date: today },
+    { from: 'agent', text: 'Pode acontecer durante um teste do veículo. O alerta foi registrado às 09:45.', time: '09:50', date: today },
+    { from: 'customer', text: 'Entendi. A localização do veículo está atualizada também?', time: '09:53', date: today },
+    { from: 'agent', text: 'Sim, a última posição foi atualizada há poucos minutos e aparece no mapa.', time: '09:55', date: today },
+    { from: 'customer', text: 'Obrigado pelo suporte, já consegui localizar no aplicativo.', time: '09:56', date: today },
+  ],
+  4: [
+    { from: 'customer', text: 'Quais são os valores para rastrear um carro e uma moto?', time: '09:23', date: today },
+    { from: 'agent', text: 'Temos planos a partir de R$ 49,90 por veículo ao mês. A instalação é combinada à parte.', time: '09:26', date: today },
+    { from: 'customer', text: 'O preço muda se eu contratar os dois juntos?', time: '09:28', date: today },
+    { from: 'agent', text: 'Posso verificar uma condição para os dois veículos. Você prefere acompanhamento mensal ou anual?', time: '09:30', date: today },
+    { from: 'customer', text: 'Tenho interesse no plano anual. Pode me enviar uma proposta?', time: '09:31', date: today },
+  ],
+  5: [
+    { from: 'customer', text: 'Estou comparando os planos. O básico também tem histórico de localização?', time: '10:02', date: today },
+    { from: 'agent', text: 'O básico inclui localização e consulta ao histórico de rotas. Os alertas inteligentes estão no plano avançado.', time: '10:06', date: today },
+    { from: 'customer', text: 'E consigo receber um aviso quando o veículo sair de uma área definida?', time: '10:09', date: today },
+    { from: 'agent', text: 'Sim, esse recurso de cerca virtual está disponível no plano avançado.', time: '10:12', date: today },
+    { from: 'customer', text: 'Pode me enviar mais detalhes e os valores desse plano?', time: '10:15', date: today },
+  ],
+  6: [
+    { from: 'customer', text: 'Meu rastreador parou de atualizar a posição do veículo.', time: '16:21', date: today },
+    { from: 'agent', text: 'Pedro, verifique se o equipamento está conectado à alimentação do veículo e reinicie o aplicativo.', time: '16:24', date: today },
+    { from: 'customer', text: 'Reiniciei o aplicativo e a posição voltou a atualizar.', time: '16:28', date: today },
+    { from: 'agent', text: 'Ótimo! A posição já aparece normalmente para nós também. Posso ajudar em algo mais?', time: '16:30', date: today },
+    { from: 'customer', text: 'Tudo certo agora, obrigado pelo atendimento!', time: '16:32', date: today },
+  ],
+}
 
 const statusClass = { Aguardando: 'waiting', 'Em atendimento': 'in-progress', Resolvido: 'resolved' }
 const conversationFilters = [
@@ -87,7 +124,7 @@ export default function Inbox({ conversations, contacts, departments, operators,
   const remoteMessages = testInbox.messagesByPhone[selectedPhone] || []
   const isOriginalConversation = conversations.some((conversation) => conversation.id === selected?.id)
   const chatMessages = selected
-    ? [...(isOriginalConversation ? starterMessages : []), ...remoteMessages]
+    ? [...(isOriginalConversation ? starterMessagesByConversation[selected.id] || [] : []), ...remoteMessages]
     : []
   const isWaiting = selected?.status === 'Aguardando'
   const canReply = selected?.status === 'Em atendimento'
