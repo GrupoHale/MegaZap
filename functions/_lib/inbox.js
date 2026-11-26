@@ -174,7 +174,7 @@ export async function sendToGupshup(env, phone, text) {
   if (missing.length) throw new RequestError(503, `Configure as variáveis: ${missing.join(', ')}.`)
   const form = new URLSearchParams({
     channel: 'whatsapp', source: env.GUPSHUP_SOURCE, destination: phone,
-    message: JSON.stringify({ type: 'text', text }), 'src.name': env.GUPSHUP_APP_NAME,
+    message: JSON.stringify({ type: 'text', text, previewUrl: true }), 'src.name': env.GUPSHUP_APP_NAME,
   })
   let response
   try {

@@ -19,7 +19,7 @@ if (missingVariables.length > 0) {
     channel: 'whatsapp',
     source: process.env.GUPSHUP_SOURCE,
     destination: process.env.GUPSHUP_TEST_DESTINATION,
-    message: JSON.stringify({ type: 'text', text: 'Mensagem teste' }),
+    message: JSON.stringify({ type: 'text', text: 'Mensagem teste', previewUrl: true }),
     'src.name': process.env.GUPSHUP_APP_NAME,
   })
 

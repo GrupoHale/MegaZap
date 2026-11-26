@@ -223,7 +223,7 @@ async function sendToGupshup(phone, text) {
     channel: 'whatsapp',
     source: process.env.GUPSHUP_SOURCE,
     destination: phone,
-    message: JSON.stringify({ type: 'text', text }),
+    message: JSON.stringify({ type: 'text', text, previewUrl: true }),
     'src.name': process.env.GUPSHUP_APP_NAME,
   })
 
