@@ -147,6 +147,25 @@ export function getOrCreateConversation(state, phone, name, direction) {
 }
 
 export function extractIncomingMessage(event) {
+  const metaValue = event.entry?.[0]?.changes?.[0]?.value
+  if (metaValue) {
+    const message = metaValue.messages?.[0]
+    // Meta v3 sends status updates and a set-callback event without a customer message.
+    // Acknowledge those events without trying to create a conversation.
+    if (!message) return null
+    const contact = metaValue.contacts?.[0]
+    event = {
+      type: 'message',
+      id: message.id,
+      source: message.from,
+      sender: { name: contact?.profile?.name },
+      payload: {
+        type: message.type,
+        text: message.text?.body,
+        caption: message.image?.caption || message.video?.caption || message.document?.caption,
+      },
+    }
+  }
   const eventType = String(event.type || event.event || '').toLowerCase()
   if (eventType && !['message', 'incoming-message', 'message-received'].includes(eventType)) return null
   const eventPayload = event.payload && typeof event.payload === 'object' ? event.payload : {}

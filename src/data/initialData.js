@@ -1,19 +1,6 @@
 export const initialData = {
-  contacts: [
-    { id: 1, name: 'Mariana Costa', phone: '+55 11 98765-4321', email: 'mariana@email.com', company: 'Studio Aurora', initials: 'MC', color: 'lilac' },
-    { id: 2, name: 'Rafael Mendes', phone: '+55 21 99876-5432', email: 'rafael@email.com', company: 'Pessoa física', initials: 'RM', color: 'blue' },
-    { id: 3, name: 'Camila Oliveira', phone: '+55 31 91234-5678', email: 'camila@email.com', company: 'Oliveira & Co.', initials: 'CO', color: 'peach' },
-    { id: 4, name: 'Lucas Ferreira', phone: '+55 11 97654-3210', email: 'lucas@email.com', company: 'Pessoa física', initials: 'LF', color: 'mint' },
-    { id: 5, name: 'Beatriz Almeida', phone: '+55 41 98888-1212', email: 'bia@email.com', company: 'Almeida Design', initials: 'BA', color: 'pink' },
-  ],
-  conversations: [
-    { id: 1, name: 'Mariana Costa', initials: 'MC', color: 'lilac', preview: 'Perfeito, fico no aguardo 😊', time: '10:42', unread: 2, queue: 'Vendas', status: 'Aguardando', online: true },
-    { id: 2, name: 'Rafael Mendes', initials: 'RM', color: 'blue', preview: 'Qual o prazo de entrega?', time: '10:18', unread: 0, queue: 'Suporte', status: 'Em atendimento' },
-    { id: 3, name: 'João Oliveira', initials: 'CO', color: 'peach', preview: 'Obrigado pelo suporte!', time: '09:56', unread: 0, queue: 'Suporte', status: 'Em atendimento' },
-    { id: 4, name: 'Lucas Ferreira', initials: 'LF', color: 'mint', preview: 'Tenho interesse no plano anual', time: '09:31', unread: 1, queue: 'Vendas', status: 'Aguardando' },
-    { id: 5, name: 'Beatriz Almeida', initials: 'BA', color: 'pink', preview: 'Pode me enviar mais detalhes?', time: 'Ontem', unread: 0, queue: 'Vendas', status: 'Resolvido' },
-    { id: 6, name: 'Pedro Santos', initials: 'PS', color: 'yellow', preview: 'Até mais, obrigado!', time: 'Ontem', unread: 0, queue: 'Suporte', status: 'Resolvido' },
-  ],
+  contacts: [],
+  conversations: [],
   queues: [
     { id: 1, name: 'Vendas', description: 'Novos negócios e oportunidades', color: 'blue', operators: 4, active: 12 },
     { id: 2, name: 'Suporte', description: 'Dúvidas e suporte técnico', color: 'blue', operators: 6, active: 8 },
